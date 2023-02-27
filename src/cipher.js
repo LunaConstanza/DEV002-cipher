@@ -1,54 +1,78 @@
 const cipher = {
-  encode: function(offset, string){
-  // --------------- PRIMERA OPCIÓN UTILIZANDO ABECEDARIO ----------------
-    string = string.toUpperCase();
-    offset = parseInt(offset);
-    const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let finalString = '';
-    for(let i = 0; i < string.length; i++){
+  encode: function (offset, string) {
+    // --------------- PRIMERA OPCIÓN UTILIZANDO ABECEDARIO ----------------
+    const cifrar = (offset, string) => {
+      string = string.toUpperCase();
+      offset = parseInt(offset);
+      const abc = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ';
+      const otherCharacters = '¡!¿?.,:;/&%$#"|°<>-_@*()= 0123456789';
+      let finalString = '';
+      for (let i = 0; i < string.length; i++) {
         const letra = string[i];
-        let positionInicial;
-        if (letra == " ") {
-          finalString += letra;        
+        if (otherCharacters.includes(letra)) {
+          finalString += letra;
         } else {
+          let positionInicial;
           for (let i = 0; i < abc.length; i++) {
-            if(letra.includes(abc[i])){
+            if (letra.includes(abc[i])) {
               positionInicial = i;
             }
           }
-          let newPosition = (positionInicial + offset) % 26;
-          finalString += abc[newPosition];
-        }
-    }
-    return finalString;
-  },
-  decode: function(offset, string){
-    // --------------- PRIMERA OPCIÓN UTILIZANDO ABECEDARIO ----------------
-    string = string.toUpperCase();
-    offset = parseInt(offset);
-    const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let finalString = '';
-    for(let i = 0; i < string.length; i++) {
-      const letra = string[i];
-      let positionInicial;
-      if (letra == " ") {
-        finalString += letra;
-      } else {
-        for (let i = 0; i < abc.length; i++) {
-          if(letra.includes(abc[i])){
-            positionInicial = i;
+          let newPosition = (positionInicial + offset) % 27;
+          if (newPosition < 0) {
+            const sumaPosition = 27 + newPosition;
+            finalString += abc[sumaPosition];
+          } else {
+            finalString += abc[newPosition];
           }
         }
-        let newPosition = ((positionInicial - offset) + 26) % 26;
-        if (newPosition < 0) {
-          const sumaPosition = 26 + newPosition;
-          finalString += abc[sumaPosition];      
+      }
+      console.log(finalString);
+      return finalString;
+    }
+
+    if (string === string.toUpperCase()) {
+      return cifrar(offset, string);
+    } else {
+      return cifrar(offset, string).toLowerCase();
+    }
+  },
+  decode: function (offset, string) {
+    // --------------- PRIMERA OPCIÓN UTILIZANDO ABECEDARIO ----------------
+    const descifrar = (offset, string) => {
+      string = string.toUpperCase();
+      offset = parseInt(offset);
+      const abc = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ';
+      const otherCharacters = '¡!¿?.,:;/&%$#"|°<>-_@*()= 0123456789';
+      let finalString = '';
+      for (let i = 0; i < string.length; i++) {
+        const letra = string[i];
+        if (otherCharacters.includes(letra)) {
+          finalString += letra;
         } else {
-          finalString += abc[newPosition];
+          let positionInicial;
+          for (let i = 0; i < abc.length; i++) {
+            if (letra.includes(abc[i])) {
+              positionInicial = i;
+            }
+          }
+          let newPosition = ((positionInicial - offset) + 27) % 27;
+          if (newPosition < 0) {
+            const sumaPosition = 27 + newPosition;
+            finalString += abc[sumaPosition];
+          } else {
+            finalString += abc[newPosition];
+          }
         }
       }
+      return finalString;
     }
-    return finalString;
+
+    if (string === string.toUpperCase()) {
+      return descifrar(offset, string);
+    } else {
+      return descifrar(offset,string).toLowerCase();
+    }
   }
 };
 
