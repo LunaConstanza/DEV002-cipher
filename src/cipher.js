@@ -2,35 +2,52 @@ const cipher = {
   encode: function(offset, string){
   // --------------- PRIMERA OPCIÓN UTILIZANDO ABECEDARIO ----------------
     string = string.toUpperCase();
-    offset = parseInt(offset)
+    offset = parseInt(offset);
     const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let finalString = '';
-    for(let i = 0; i < abc.length; i++){     // hay error en el orden que entra el cifrado
-      if(string.includes(abc[i])){
-        console.log();
-        let newPosition = (i + offset) % 26;
-        console.log(newPosition);
-        finalString += abc[newPosition];
-      }
+    for(let i = 0; i < string.length; i++){
+        const letra = string[i];
+        let positionInicial;
+        if (letra == " ") {
+          finalString += letra;        
+        } else {
+          for (let i = 0; i < abc.length; i++) {
+            if(letra.includes(abc[i])){
+              positionInicial = i;
+            }
+          }
+          let newPosition = (positionInicial + offset) % 26;
+          finalString += abc[newPosition];
+        }
     }
-    console.log(finalString);
     return finalString;
   },
   decode: function(offset, string){
     // --------------- PRIMERA OPCIÓN UTILIZANDO ABECEDARIO ----------------
     string = string.toUpperCase();
-    offset = parseInt(offset)
+    offset = parseInt(offset);
     const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let finalString = '';
-    for(let i = 0; i < abc.length; i++){     // hay error en el orden que entra el decifrado
-      if(string.includes(abc[i])){
-        console.log(i);
-        let newPosition = ((i - offset) + 26) % 26;
-        console.log(newPosition);
-        finalString += abc[newPosition];
+    for(let i = 0; i < string.length; i++) {
+      const letra = string[i];
+      let positionInicial;
+      if (letra == " ") {
+        finalString += letra;
+      } else {
+        for (let i = 0; i < abc.length; i++) {
+          if(letra.includes(abc[i])){
+            positionInicial = i;
+          }
+        }
+        let newPosition = ((positionInicial - offset) + 26) % 26;
+        if (newPosition < 0) {
+          const sumaPosition = 26 + newPosition;
+          finalString += abc[sumaPosition];      
+        } else {
+          finalString += abc[newPosition];
+        }
       }
     }
-    console.log(finalString);
     return finalString;
   }
 };
